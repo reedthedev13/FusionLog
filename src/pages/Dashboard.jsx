@@ -53,7 +53,7 @@ function DateRangePicker({ selectedRange, onChange }) {
         <button
           key={value}
           onClick={() => onChange(value)}
-          className={`px-4 py-2 rounded-lg border ${
+          className={`px-4 py-2 rounded-lg border focus:outline-none focus:ring-2 focus:ring-blue-400 shadow-sm ${
             selectedRange === value
               ? "bg-blue-600 text-white border-blue-600"
               : "bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200 border-gray-300 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-700"
@@ -100,10 +100,10 @@ export default function Dashboard() {
   return (
     <PageWrapper>
       <div className="mb-8">
-        <h2 className="text-3xl font-extrabold text-gray-900 dark:text-white">
+        <h2 className="text-4xl font-extrabold text-gray-900 dark:text-white tracking-tight mb-1">
           📊 Performance Dashboard
         </h2>
-        <p className="text-gray-500 dark:text-gray-400 mt-2">
+        <p className="text-lg text-gray-500 dark:text-gray-400 mt-2">
           Your trading stats & performance at a glance
         </p>
       </div>
@@ -113,9 +113,11 @@ export default function Dashboard() {
         {stats.map(({ id, name, stat, icon: Icon, color }) => (
           <div
             key={id}
-            className="flex items-center p-6 bg-white dark:bg-gray-800 rounded-2xl shadow-md hover:shadow-xl transition-shadow"
+            className="flex items-center p-6 bg-white dark:bg-gray-800 rounded-2xl shadow-md hover:shadow-2xl hover:scale-[1.03] transition-all duration-200 cursor-pointer"
           >
-            <div className={`${color} p-3 rounded-full text-white mr-5`}>
+            <div
+              className={`${color} p-3 rounded-full text-white mr-5 shadow-lg`}
+            >
               <Icon className="h-8 w-8" />
             </div>
             <div>
