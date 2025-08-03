@@ -1,38 +1,6 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import PageWrapper from "../components/PageWrapper";
 import TradePerformanceChart from "../components/TradePerformanceChart";
-
-const stats = [
-  {
-    id: 1,
-    name: "Total Trades",
-    stat: 128,
-    icon: DocumentChartBarIcon,
-    color: "bg-blue-500",
-  },
-  {
-    id: 2,
-    name: "Win Rate",
-    stat: "35%",
-    icon: ArrowTrendingUpIcon,
-    color: "bg-green-500",
-  },
-  {
-    id: 3,
-    name: "Total PnL",
-    stat: "$12,240",
-    icon: CurrencyDollarIcon,
-    color: "bg-purple-500",
-  },
-  {
-    id: 4,
-    name: "Best Setup",
-    stat: "HTF Breakout",
-    icon: ChartBarIcon,
-    color: "bg-pink-500",
-  },
-];
-
 import {
   ChartBarIcon,
   CurrencyDollarIcon,
@@ -40,43 +8,74 @@ import {
   DocumentChartBarIcon,
 } from "@heroicons/react/24/outline";
 
-function DateRangePicker({ selectedRange, onChange }) {
-  const ranges = [
-    { label: "Last 7 Days", value: "7d" },
-    { label: "Last Month", value: "1m" },
-    { label: "Year to Date", value: "ytd" },
-  ];
-
-  return (
-    <div className="flex space-x-4 mb-6">
-      {ranges.map(({ label, value }) => (
-        <button
-          key={value}
-          onClick={() => onChange(value)}
-          className={`px-4 py-2 rounded-lg border focus:outline-none focus:ring-2 focus:ring-blue-400 shadow-sm ${
-            selectedRange === value
-              ? "bg-blue-600 text-white border-blue-600"
-              : "bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200 border-gray-300 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-700"
-          } transition`}
-        >
-          {label}
-        </button>
-      ))}
-    </div>
-  );
-}
-
 export default function Dashboard() {
   const [selectedRange, setSelectedRange] = useState("7d");
+  const [trades, setTrades] = useState([]);
+
+  useEffect(() => {
+    fetch("http://localhost:4000/api/trades")
+      .then((res) => res.json())
+      .then((data) => setTrades(data));
+  }, []);
+
+  const stats = [
+    {
+      id: 1,
+      name: "Total Trades",
+      stat: 128,
+      icon: DocumentChartBarIcon,
+      color: "bg-blue-500",
+    },
+    {
+      id: 2,
+      name: "Win Rate",
+      stat: "35%",
+      icon: ArrowTrendingUpIcon,
+      color: "bg-green-500",
+    },
+    {
+      id: 3,
+      name: "Total PnL",
+      stat: "$12,240",
+      icon: CurrencyDollarIcon,
+      color: "bg-purple-500",
+    },
+    {
+      id: 4,
+      name: "Best Setup",
+      stat: "HTF Breakout",
+      icon: ChartBarIcon,
+      color: "bg-pink-500",
+    },
+  ];
+
+  function DateRangePicker({ selectedRange, onChange }) {
+    const ranges = [
+      { label: "Last 7 Days", value: "7d" },
+      { label: "Last Month", value: "1m" },
+      { label: "Year to Date", value: "ytd" },
+    ];
+
+    return (
+      <div className="flex space-x-4 mb-6">
+        {ranges.map(({ label, value }) => (
+          <button
+            key={value}
+            onClick={() => onChange(value)}
+            className={`px-4 py-2 rounded-lg border focus:outline-none focus:ring-2 focus:ring-blue-400 shadow-sm ${
+              selectedRange === value
+                ? "bg-blue-600 text-white border-blue-600"
+                : "bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200 border-gray-300 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-700"
+            } transition`}
+          >
+            {label}
+          </button>
+        ))}
+      </div>
+    );
+  }
 
   // Example dummy trade data — replace with your backend API data
-  const trades = [
-    { exitDate: "2025-06-01", pnl: 500 },
-    { exitDate: "2025-06-10", pnl: -200 },
-    { exitDate: "2025-06-15", pnl: 300 },
-    { exitDate: "2025-07-01", pnl: 400 },
-    { exitDate: "2025-07-10", pnl: -150 },
-  ];
 
   // Filter trades based on selected date range
   const filteredTrades = useMemo(() => {
